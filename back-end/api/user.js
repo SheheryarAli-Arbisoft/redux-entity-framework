@@ -3,10 +3,13 @@ const User = require('../models/User');
 
 const userRouter = express.Router();
 
-userRouter.get('/', async (_, res) => {
+userRouter.get('/', async (req, res) => {
+  const { users } = req.query;
+  const usersList = JSON.parse(users);
+
   try {
-    const users = await User.find();
-    return res.json(users);
+    const result = await User.find({ _id: { $in: usersList } });
+    return res.json(result);
   } catch (err) {
     return res.status(500).send('Server error');
   }

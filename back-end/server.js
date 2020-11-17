@@ -6,6 +6,7 @@ const { userRouter, postRouter, commentRouter } = require('./api');
 connecDb();
 
 const app = express();
+app.use(express.json());
 
 app.use('/api/users', userRouter);
 app.use('/api/posts', postRouter);
