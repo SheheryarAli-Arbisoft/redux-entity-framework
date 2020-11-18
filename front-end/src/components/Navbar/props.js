@@ -7,5 +7,5 @@ export const propTypes = {
 
 export const defaultProps = {
   position: 'static',
-  color: 'transparent',
+  color: 'primary',
 };
