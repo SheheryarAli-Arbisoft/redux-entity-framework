@@ -1,7 +1,14 @@
 import React from 'react';
+import { CssBaseline } from '@material-ui/core';
+import { Home } from './pages';
 
 const App = () => {
-  return <div>Hello world</div>;
+  return (
+    <>
+      <CssBaseline />
+      <Home />
+    </>
+  );
 };
 
 export default App;

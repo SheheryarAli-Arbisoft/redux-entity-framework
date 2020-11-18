@@ -6,7 +6,7 @@ import { Text } from '../Text';
 export const Navbar = ({ ...rest }) => {
   return (
     <StyledNavbar {...rest}>
-      <StyledWrapper>
+      <StyledWrapper {...rest}>
         <Text variant='h6'>Blog App</Text>
       </StyledWrapper>
     </StyledNavbar>
