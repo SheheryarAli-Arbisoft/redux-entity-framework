@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { loadComments } from '../comments/actions';
 import { loadUsers } from '../users/actions';
 
 export const GET_POSTS_REQUEST = 'posts/GET_POSTS_REQUEST';
@@ -26,6 +27,17 @@ export const loadPosts = () => async dispatch => {
   dispatch(setIsLoading());
   try {
     const { data: posts } = await axios.get('/api/posts');
+
+    const commentsList = [];
+    posts.forEach(post => {
+      post.comments.forEach(comment => {
+        if (!commentsList.includes(comment.comment)) {
+          commentsList.push(comment.comment);
+        }
+      });
+    });
+
+    await dispatch(loadComments(commentsList));
 
     const usersList = [];
     posts.forEach(post => {

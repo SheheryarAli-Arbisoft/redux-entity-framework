@@ -3,12 +3,11 @@ const Comment = require('../models/Comment');
 
 const commentRouter = express.Router();
 
-commentRouter.get('/', async (req, res) => {
-  const { comments } = req.query;
-  const commentsList = JSON.parse(comments);
+commentRouter.post('/', async (req, res) => {
+  const { comments } = req.body;
 
   try {
-    const result = await Comment.find({ _id: { $in: commentsList } });
+    const result = await Comment.find({ _id: { $in: comments } });
     return res.json(result);
   } catch (err) {
     return res.status(500).send('Server error');

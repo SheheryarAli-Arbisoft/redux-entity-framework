@@ -1,5 +1,4 @@
 import axios from 'axios';
-import queryString from 'query-string';
 
 export const GET_USERS_REQUEST = 'users/GET_USERS_REQUEST';
 export const GET_USERS_SUCCESS = 'users/GET_USERS_SUCCESS';
@@ -22,16 +21,19 @@ const errorOccurred = err => ({
   },
 });
 
-export const loadUsers = usersList => async dispatch => {
+export const loadUsers = (usersList = []) => async dispatch => {
   dispatch(setIsLoading());
-  try {
-    const url = `/api/users?list=${encodeURIComponent(
-      queryString.stringify({
-        users: usersList,
-      })
-    )}`;
 
-    const { data: users } = await axios.get(url);
+  const body = JSON.stringify({ users: usersList });
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const { data: users } = await axios.post('/api/users', body, config);
     dispatch(usersLoaded(users));
   } catch (err) {
     dispatch(errorOccurred());
