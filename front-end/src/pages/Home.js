@@ -18,7 +18,7 @@ export const Home = () => {
     <>
       <Navbar />
       <Container>
-        {!isLoading && data.map(post => <Card post={post} />)}
+        {!isLoading && data.map(post => <Card key={post._id} post={post} />)}
       </Container>
     </>
   );
