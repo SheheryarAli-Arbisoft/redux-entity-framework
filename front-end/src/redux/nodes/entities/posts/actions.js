@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { loadComments } from '../comments/actions';
+import { getComments } from '../comments/selectors';
 import { loadUsers } from '../users/actions';
 
 export const GET_POSTS_REQUEST = 'posts/GET_POSTS_REQUEST';
@@ -23,7 +24,7 @@ const errorOccurred = err => ({
   },
 });
 
-export const loadPosts = () => async dispatch => {
+export const loadPosts = () => async (dispatch, getState) => {
   dispatch(setIsLoading());
   try {
     const { data: posts } = await axios.get('/api/posts');
@@ -39,7 +40,15 @@ export const loadPosts = () => async dispatch => {
 
     await dispatch(loadComments(commentsList));
 
+    const { data: comments } = getComments(getState());
+
+    // Generating the lists of users to fetch
     const usersList = [];
+    comments.forEach(comment => {
+      if (!usersList.includes(comment.user)) {
+        usersList.push(comment.user);
+      }
+    });
     posts.forEach(post => {
       if (!usersList.includes(post.user)) {
         usersList.push(post.user);
