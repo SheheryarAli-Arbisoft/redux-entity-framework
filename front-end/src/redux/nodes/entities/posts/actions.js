@@ -1,5 +1,5 @@
 import axios from 'axios';
-import queryString from 'query-string';
+import { loadUsers } from '../users/actions';
 
 export const GET_POSTS_REQUEST = 'posts/GET_POSTS_REQUEST';
 export const GET_POSTS_SUCCESS = 'posts/GET_POSTS_SUCCESS';
@@ -26,7 +26,6 @@ export const loadPosts = () => async dispatch => {
   dispatch(setIsLoading());
   try {
     const { data: posts } = await axios.get('/api/posts');
-    dispatch(postsLoaded(posts));
 
     const usersList = [];
     posts.forEach(post => {
@@ -35,15 +34,8 @@ export const loadPosts = () => async dispatch => {
       }
     });
 
-    const url = `/api/users?list=${encodeURIComponent(
-      queryString.stringify({
-        users: usersList,
-      })
-    )}`;
-
-    const { data: users } = await axios.get(url);
-
-    console.log('Users:', users);
+    await dispatch(loadUsers(usersList));
+    dispatch(postsLoaded(posts));
   } catch (err) {
     dispatch(errorOccurred());
   }
