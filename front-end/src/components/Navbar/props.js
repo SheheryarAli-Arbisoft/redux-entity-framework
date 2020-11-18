@@ -1,5 +1,9 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
-export const propTypes = {};
+export const propTypes = {
+  color: PropTypes.string,
+};
 
-export const defaultProps = {};
+export const defaultProps = {
+  color: 'transparent',
+};
