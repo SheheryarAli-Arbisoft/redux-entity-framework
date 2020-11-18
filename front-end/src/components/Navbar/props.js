@@ -6,6 +6,6 @@ export const propTypes = {
 };
 
 export const defaultProps = {
-  position: 'static',
+  position: 'absolute',
   color: 'primary',
 };

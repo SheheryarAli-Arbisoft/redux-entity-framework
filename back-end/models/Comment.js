@@ -8,6 +8,13 @@ const CommentSchema = mongoose.Schema({
   content: {
     type: String,
   },
+  timestamp: {
+    type: Date,
+    default: Date.now,
+  },
+  replies: {
+    type: Array,
+  },
 });
 
 module.exports = mongoose.model('comment', CommentSchema);
