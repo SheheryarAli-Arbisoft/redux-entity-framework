@@ -2,6 +2,7 @@ import { callApi, METHOD_GET } from '../../../api';
 import { loadComments } from '../comments/actions';
 import { getComments } from '../comments/selectors';
 import { loadUsers } from '../users/actions';
+import { getUsers } from '../users/selectors';
 
 const API_URL = '/api/posts';
 export const GET_POSTS_REQUEST = 'posts/GET_POSTS_REQUEST';
@@ -37,15 +38,19 @@ const getCommentList = posts => {
   return result;
 };
 
-const getUsersList = (posts, comments) => {
+const getUsersList = (posts, comments, getState) => {
+  const { data: users } = getUsers(getState());
+
+  const loadedUsers = users.map(user => user._id);
+  console.log(loadedUsers);
   const result = [];
   posts.forEach(post => {
-    if (!result.includes(post.user)) {
+    if (!result.includes(post.user) && !loadedUsers.includes(post.user)) {
       result.push(post.user);
     }
   });
   comments.forEach(comment => {
-    if (!result.includes(comment.user)) {
+    if (!result.includes(comment.user) && !loadedUsers.includes(comment.user)) {
       result.push(comment.user);
     }
   });
@@ -62,7 +67,7 @@ export const loadPosts = (page, limit) => async (dispatch, getState) => {
     await dispatch(loadComments(commentsList));
     const { data: comments } = getComments(getState());
 
-    const usersList = getUsersList(posts, comments);
+    const usersList = getUsersList(posts, comments, getState);
     await dispatch(loadUsers(usersList));
 
     dispatch(postsLoaded(posts));

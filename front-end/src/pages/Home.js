@@ -22,8 +22,9 @@ export const Home = () => {
     <>
       <Navbar />
       <Container>
-        {!isLoading && data.map(post => <Card key={post._id} post={post} />)}
-
+        {data.map(post => (
+          <Card key={post._id} post={post} />
+        ))}
         {isLoading ? (
           <LoadingIndicator />
         ) : (

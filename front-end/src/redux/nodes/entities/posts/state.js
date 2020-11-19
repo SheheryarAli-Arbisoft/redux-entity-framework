@@ -11,7 +11,7 @@ export const isLoading = state => ({
 
 export const loadPosts = (state, payload) => ({
   ...state,
-  data: payload,
+  data: [...state.data, ...payload],
   isLoading: false,
   error: null,
 });

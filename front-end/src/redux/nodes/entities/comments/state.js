@@ -11,7 +11,7 @@ export const isLoading = state => ({
 
 export const loadComments = (state, payload) => ({
   ...state,
-  data: payload,
+  data: [...state.data, ...payload],
   isLoading: false,
   error: null,
 });
