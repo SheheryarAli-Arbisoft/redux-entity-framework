@@ -1,8 +1,9 @@
-import axios from 'axios';
+import { callApi, METHOD_GET } from '../../../api';
 import { loadComments } from '../comments/actions';
 import { getComments } from '../comments/selectors';
 import { loadUsers } from '../users/actions';
 
+const API_URL = '/api/posts';
 export const GET_POSTS_REQUEST = 'posts/GET_POSTS_REQUEST';
 export const GET_POSTS_SUCCESS = 'posts/GET_POSTS_SUCCESS';
 export const GET_POSTS_ERROR = 'posts/GET_POSTS_ERROR';
@@ -24,38 +25,46 @@ const errorOccurred = err => ({
   },
 });
 
+const getCommentList = posts => {
+  const result = [];
+  posts.forEach(post => {
+    post.comments.forEach(comment => {
+      if (!result.includes(comment.comment)) {
+        result.push(comment.comment);
+      }
+    });
+  });
+  return result;
+};
+
+const getUsersList = (posts, comments) => {
+  const result = [];
+  posts.forEach(post => {
+    if (!result.includes(post.user)) {
+      result.push(post.user);
+    }
+  });
+  comments.forEach(comment => {
+    if (!result.includes(comment.user)) {
+      result.push(comment.user);
+    }
+  });
+  return result;
+};
+
 export const loadPosts = () => async (dispatch, getState) => {
   dispatch(setIsLoading());
+
   try {
-    const { data: posts } = await axios.get('/api/posts');
+    const posts = await callApi(METHOD_GET, API_URL);
 
-    const commentsList = [];
-    posts.forEach(post => {
-      post.comments.forEach(comment => {
-        if (!commentsList.includes(comment.comment)) {
-          commentsList.push(comment.comment);
-        }
-      });
-    });
-
+    const commentsList = getCommentList(posts);
     await dispatch(loadComments(commentsList));
-
     const { data: comments } = getComments(getState());
 
-    // Generating the lists of users to fetch
-    const usersList = [];
-    comments.forEach(comment => {
-      if (!usersList.includes(comment.user)) {
-        usersList.push(comment.user);
-      }
-    });
-    posts.forEach(post => {
-      if (!usersList.includes(post.user)) {
-        usersList.push(post.user);
-      }
-    });
-
+    const usersList = getUsersList(posts, comments);
     await dispatch(loadUsers(usersList));
+
     dispatch(postsLoaded(posts));
   } catch (err) {
     dispatch(errorOccurred());

@@ -1,5 +1,6 @@
-import axios from 'axios';
+import { callApi, METHOD_POST } from '../../../api';
 
+const API_URL = '/api/comments';
 export const GET_COMMENTS_REQUEST = 'comments/GET_COMMENTS_REQUEST';
 export const GET_COMMENTS_SUCCESS = 'comments/GET_COMMENTS_SUCCESS';
 export const GET_COMMENTS_ERROR = 'comments/GET_COMMENTS_ERROR';
@@ -24,16 +25,12 @@ const errorOccurred = err => ({
 export const loadComments = (commentsList = []) => async dispatch => {
   dispatch(setIsLoading());
 
-  const body = JSON.stringify({ comments: commentsList });
-
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
+  const body = {
+    comments: commentsList,
   };
 
   try {
-    const { data: comments } = await axios.post('/api/comments', body, config);
+    const comments = await callApi(METHOD_POST, API_URL, body);
     dispatch(commentsLoaded(comments));
   } catch (err) {
     dispatch(errorOccurred());
