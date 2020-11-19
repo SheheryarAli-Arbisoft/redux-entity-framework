@@ -33,6 +33,6 @@ export const loadComments = (commentsList = []) => async dispatch => {
     const comments = await callApi(METHOD_POST, API_URL, body);
     dispatch(commentsLoaded(comments));
   } catch (err) {
-    dispatch(errorOccurred());
+    dispatch(errorOccurred(err));
   }
 };

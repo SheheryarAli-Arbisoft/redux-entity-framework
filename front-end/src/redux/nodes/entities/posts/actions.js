@@ -1,4 +1,4 @@
-import { callApi, METHOD_GET } from '../../../api';
+import { callApi, METHOD_GET, METHOD_POST } from '../../../api';
 import { loadComments } from '../comments/actions';
 import { getComments } from '../comments/selectors';
 import { loadUsers } from '../users/actions';
@@ -47,6 +47,11 @@ const getUsersList = (posts, comments, getState) => {
     if (!result.includes(post.user) && !loadedUsers.includes(post.user)) {
       result.push(post.user);
     }
+    post.likes.forEach(like => {
+      if (!result.includes(like.user) && !loadedUsers.includes(like.user)) {
+        result.push(like.user);
+      }
+    });
   });
   comments.forEach(comment => {
     if (!result.includes(comment.user) && !loadedUsers.includes(comment.user)) {
@@ -71,6 +76,15 @@ export const loadPosts = (page, limit) => async (dispatch, getState) => {
 
     dispatch(postsLoaded(posts));
   } catch (err) {
-    dispatch(errorOccurred());
+    dispatch(errorOccurred(err));
+  }
+};
+
+export const createPost = (values, history) => async dispatch => {
+  try {
+    await callApi(METHOD_POST, `${API_URL}/new`, values);
+    history.push('/');
+  } catch (err) {
+    dispatch(errorOccurred(err));
   }
 };

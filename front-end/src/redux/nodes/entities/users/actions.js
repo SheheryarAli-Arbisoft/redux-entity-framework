@@ -33,6 +33,6 @@ export const loadUsers = (usersList = []) => async dispatch => {
     const users = await callApi(METHOD_POST, API_URL, body);
     dispatch(usersLoaded(users));
   } catch (err) {
-    dispatch(errorOccurred());
+    dispatch(errorOccurred(err));
   }
 };

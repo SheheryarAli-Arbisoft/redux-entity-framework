@@ -6,6 +6,7 @@ export const propTypes = {
   fullWidth: PropTypes.bool,
   size: PropTypes.string,
   color: PropTypes.string,
+  type: PropTypes.string,
 };
 
 export const defaultProps = {
