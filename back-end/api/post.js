@@ -4,8 +4,8 @@ const Post = require('../models/Post');
 const postRouter = express.Router();
 
 postRouter.get('/', async (req, res) => {
-  const skip = parseInt(req.query.skip, 10);
   const limit = parseInt(req.query.limit, 10);
+  const skip = (parseInt(req.query.page, 10) - 1) * limit;
 
   try {
     const posts = await Post.find().skip(skip).limit(limit);

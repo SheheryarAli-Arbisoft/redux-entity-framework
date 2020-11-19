@@ -5,13 +5,14 @@ import { getPosts } from '../redux/nodes/entities/posts/selectors';
 import { Navbar } from '../components/Navbar';
 import { Container } from '../components/Container';
 import { Card } from '../components/Card';
+import { LoadingIndicator } from '../components/LoadingIndicator';
 
 export const Home = () => {
   const dispatch = useDispatch();
   const { isLoading, data } = useSelector(getPosts);
 
   useEffect(() => {
-    dispatch(loadPosts());
+    dispatch(loadPosts(1, 10));
   }, []);
 
   return (
@@ -19,6 +20,7 @@ export const Home = () => {
       <Navbar />
       <Container>
         {!isLoading && data.map(post => <Card key={post._id} post={post} />)}
+        {isLoading && <LoadingIndicator />}
       </Container>
     </>
   );

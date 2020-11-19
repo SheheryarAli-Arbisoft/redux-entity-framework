@@ -52,11 +52,11 @@ const getUsersList = (posts, comments) => {
   return result;
 };
 
-export const loadPosts = () => async (dispatch, getState) => {
+export const loadPosts = (page, limit) => async (dispatch, getState) => {
   dispatch(setIsLoading());
 
   try {
-    const posts = await callApi(METHOD_GET, API_URL);
+    const posts = await callApi(METHOD_GET, API_URL, {}, { page, limit });
 
     const commentsList = getCommentList(posts);
     await dispatch(loadComments(commentsList));

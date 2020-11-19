@@ -9,12 +9,13 @@ const getHeaders = () => {
   };
 };
 
-export const callApi = async (method, url, body = {}) => {
+export const callApi = async (method, url, body = {}, params = {}) => {
   const { data } = await axios.request({
     method,
     headers: getHeaders(),
     url,
     data: JSON.stringify(body),
+    params,
   });
   return data;
 };
