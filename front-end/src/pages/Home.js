@@ -22,6 +22,7 @@ export const Home = () => {
     <>
       <Navbar />
       <Container>
+        <Button style={{ marginBottom: '20px' }}>Create post</Button>
         {data.map(post => (
           <Card key={post._id} post={post} />
         ))}

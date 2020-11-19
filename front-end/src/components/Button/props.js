@@ -5,10 +5,12 @@ export const propTypes = {
   variant: PropTypes.string,
   fullWidth: PropTypes.bool,
   size: PropTypes.string,
+  color: PropTypes.string,
 };
 
 export const defaultProps = {
   variant: 'contained',
   fullWidth: false,
   size: 'medium',
+  color: 'primary',
 };

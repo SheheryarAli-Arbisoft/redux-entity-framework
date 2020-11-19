@@ -40,9 +40,8 @@ const getCommentList = posts => {
 
 const getUsersList = (posts, comments, getState) => {
   const { data: users } = getUsers(getState());
-
   const loadedUsers = users.map(user => user._id);
-  console.log(loadedUsers);
+
   const result = [];
   posts.forEach(post => {
     if (!result.includes(post.user) && !loadedUsers.includes(post.user)) {
