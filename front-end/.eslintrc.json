@@ -23,6 +23,7 @@
     "react/jsx-props-no-spreading": 0,
     "react-hooks/exhaustive-deps": 0,
     "no-underscore-dangle": 0,
-    "no-shadow": 0
+    "no-shadow": 0,
+    "react/jsx-curly-newline": 0
   }
 }

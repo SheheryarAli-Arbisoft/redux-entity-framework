@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { CssBaseline, StylesProvider } from '@material-ui/core';
 import { Home, CreatePost, Register, Login } from './pages';
+import { PrivateRoute } from './components/Routing/PrivateRoute';
 import { store } from './redux/store';
 import './App.css';
 
@@ -16,7 +17,7 @@ const App = () => {
             <Route exact path='/create-post' component={CreatePost} />
             <Route exact path='/register' component={Register} />
             <Route exact path='/login' component={Login} />
-            <Route exact path='/' component={Home} />
+            <PrivateRoute exact path='/' component={Home} />
           </Switch>
         </Router>
       </StylesProvider>
