@@ -5,4 +5,7 @@ export const StyledNavbar = styled(AppBar)`
   z-index: 1;
 `;
 
-export const StyledWrapper = styled(Toolbar)``;
+export const StyledWrapper = styled(Toolbar)`
+  display: flex;
+  gap: 10px;
+`;
