@@ -1,0 +1,9 @@
+* {
+  font-family: 'Encode Sans', sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}

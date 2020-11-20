@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import { StyledNavbar, StyledWrapper } from './styled';
+import { StyledNavbar, StyledWrapper, StyledLink } from './styled';
 import { propTypes, defaultProps } from './props';
 import { Text } from '../Text';
 
@@ -10,18 +9,17 @@ export const Navbar = ({ ...rest }) => {
     <StyledNavbar {...rest}>
       <StyledWrapper {...rest}>
         <Text variant='h6' style={{ flexGrow: 1 }}>
-          Blog App
+          <StyledLink to='/'>Blog App</StyledLink>
         </Text>
-        <Link
-          to='/register'
-          style={{
-            color: 'inherit',
-            textDecoration: 'none',
-          }}
-        >
+
+        <StyledLink to='/register'>
           <Button color='inherit'>Register</Button>
-        </Link>
-        <Button color='inherit'>Login</Button>
+        </StyledLink>
+
+        <StyledLink to='/login'>
+          <Button color='inherit'>Login</Button>
+        </StyledLink>
+
         <Button color='inherit'>Logout</Button>
       </StyledWrapper>
     </StyledNavbar>
