@@ -14,9 +14,9 @@ export const Navbar = ({ ...rest }) => {
   return (
     <StyledNavbar {...rest}>
       <StyledWrapper {...rest}>
-        <Text variant='h6' style={{ flexGrow: 1 }}>
-          <StyledLink to='/'>Blog App</StyledLink>
-        </Text>
+        <StyledLink to='/' style={{ flexGrow: 1 }}>
+          <Text variant='h6'>Blog App</Text>
+        </StyledLink>
         {isAuthenticated ? (
           <>
             <Button color='inherit' onClick={() => dispatch(logout())}>
