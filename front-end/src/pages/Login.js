@@ -1,6 +1,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Navbar } from '../components/Navbar';
 import {
   Container,
@@ -11,9 +12,11 @@ import { Text } from '../components/Text';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { loginUser } from '../redux/nodes/authentication/actions';
+import { getData } from '../redux/nodes/authentication/selectors';
 
 export const Login = () => {
   const dispatch = useDispatch();
+  const { isLoading, isAuthenticated } = useSelector(getData);
   const {
     values: { email, password },
     handleChange,
@@ -27,6 +30,10 @@ export const Login = () => {
       dispatch(loginUser(values));
     },
   });
+
+  if (!isLoading && isAuthenticated) {
+    return <Redirect to='/' />;
+  }
 
   return (
     <>
