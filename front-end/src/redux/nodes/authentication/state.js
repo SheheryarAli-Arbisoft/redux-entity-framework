@@ -9,7 +9,7 @@ export const isLoading = state => ({
   isLoading: true,
 });
 
-export const registerSuccess = (state, payload) => {
+export const authenticationSuccess = (state, payload) => {
   localStorage.setItem('auth-token', payload);
   return {
     ...state,
@@ -18,6 +18,13 @@ export const registerSuccess = (state, payload) => {
     isAuthenticated: true,
   };
 };
+
+export const logout = state => ({
+  ...state,
+  isLoading: false,
+  error: null,
+  isAuthenticated: false,
+});
 
 export const errorOccurred = (state, payload) => {
   localStorage.removeItem('auth-token');

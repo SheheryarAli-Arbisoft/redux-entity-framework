@@ -1,12 +1,14 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StyledNavbar, StyledWrapper, StyledLink } from './styled';
 import { propTypes, defaultProps } from './props';
 import { Text } from '../Text';
+import { logout } from '../../redux/nodes/authentication/actions';
 import { getData } from '../../redux/nodes/authentication/selectors';
 
 export const Navbar = ({ ...rest }) => {
+  const dispatch = useDispatch();
   const { isAuthenticated } = useSelector(getData);
 
   return (
@@ -17,7 +19,9 @@ export const Navbar = ({ ...rest }) => {
         </Text>
         {isAuthenticated ? (
           <>
-            <Button color='inherit'>Logout</Button>
+            <Button color='inherit' onClick={() => dispatch(logout())}>
+              Logout
+            </Button>
           </>
         ) : (
           <>
