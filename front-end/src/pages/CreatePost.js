@@ -12,7 +12,11 @@ import { createPost } from '../redux/nodes/entities/posts/actions';
 export const CreatePost = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { values, handleChange, handleSubmit } = useFormik({
+  const {
+    values: { title, content },
+    handleChange,
+    handleSubmit,
+  } = useFormik({
     initialValues: {
       title: '',
       content: '',
@@ -21,8 +25,6 @@ export const CreatePost = () => {
       dispatch(createPost(values, history));
     },
   });
-
-  const { title, content } = values;
 
   return (
     <>
