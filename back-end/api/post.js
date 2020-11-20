@@ -10,7 +10,7 @@ postRouter.get('/', async (req, res) => {
 
   try {
     const posts = await Post.find().skip(skip).limit(limit);
-    return res.json(posts);
+    res.json(posts);
   } catch (err) {
     return res.status(500).send('Server error');
   }
@@ -33,7 +33,7 @@ postRouter.post(
     console.log('Title:', title);
     console.log('Content:', content);
 
-    return res.send('Post created');
+    res.send('Post created');
   }
 );
 

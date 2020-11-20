@@ -8,7 +8,7 @@ commentRouter.post('/', async (req, res) => {
 
   try {
     const result = await Comment.find({ _id: { $in: comments } });
-    return res.json(result);
+    res.json(result);
   } catch (err) {
     return res.status(500).send('Server error');
   }

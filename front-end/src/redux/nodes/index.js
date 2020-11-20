@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
-import { entities } from './entities';
+import { authentication } from './authentication/reducer';
+import { entities } from './entities/reducer';
 
-export const rootReducer = combineReducers({ entities });
+export const rootReducer = combineReducers({ authentication, entities });

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
+import { useDispatch } from 'react-redux';
 import { Navbar } from '../components/Navbar';
 import {
   Container,
@@ -9,8 +10,10 @@ import {
 import { Text } from '../components/Text';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
+import { registerUser } from '../redux/nodes/authentication/actions';
 
 export const Register = () => {
+  const dispatch = useDispatch();
   const {
     values: { name, email, password, cpassword },
     handleChange,
@@ -23,7 +26,7 @@ export const Register = () => {
       cpassword: '',
     },
     onSubmit: values => {
-      console.log(values);
+      dispatch(registerUser(values));
     },
   });
 

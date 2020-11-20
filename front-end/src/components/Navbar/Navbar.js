@@ -1,26 +1,34 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 import { StyledNavbar, StyledWrapper, StyledLink } from './styled';
 import { propTypes, defaultProps } from './props';
 import { Text } from '../Text';
+import { getData } from '../../redux/nodes/authentication/selectors';
 
 export const Navbar = ({ ...rest }) => {
+  const { isAuthenticated } = useSelector(getData);
+
   return (
     <StyledNavbar {...rest}>
       <StyledWrapper {...rest}>
         <Text variant='h6' style={{ flexGrow: 1 }}>
           <StyledLink to='/'>Blog App</StyledLink>
         </Text>
-
-        <StyledLink to='/register'>
-          <Button color='inherit'>Register</Button>
-        </StyledLink>
-
-        <StyledLink to='/login'>
-          <Button color='inherit'>Login</Button>
-        </StyledLink>
-
-        <Button color='inherit'>Logout</Button>
+        {isAuthenticated ? (
+          <>
+            <Button color='inherit'>Logout</Button>
+          </>
+        ) : (
+          <>
+            <StyledLink to='/register'>
+              <Button color='inherit'>Register</Button>
+            </StyledLink>
+            <StyledLink to='/login'>
+              <Button color='inherit'>Login</Button>
+            </StyledLink>
+          </>
+        )}
       </StyledWrapper>
     </StyledNavbar>
   );
