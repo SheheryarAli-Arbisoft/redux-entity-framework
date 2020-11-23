@@ -35,6 +35,7 @@ export const loadUser = () => async dispatch => {
   try {
     const user = await callApi(METHOD_GET, `${API_URL}/current`);
     dispatch(userLoaded(user));
+    return user._id;
   } catch (err) {
     dispatch(errorOccurred(err));
     throw err;

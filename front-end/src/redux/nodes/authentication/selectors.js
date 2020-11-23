@@ -5,5 +5,6 @@ export const getData = createSelector(
   authentication => ({
     isLoading: authentication.isLoading,
     isAuthenticated: authentication.isAuthenticated,
+    userId: authentication.userId,
   })
 );

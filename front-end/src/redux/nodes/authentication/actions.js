@@ -11,29 +11,36 @@ const setIsLoading = () => ({
   type: AUTHENTICATION_REQUEST,
 });
 
-const authenticationSuccess = (payload = null) => ({
+const authenticationSuccess = userId => ({
   type: AUTHENTICATION_SUCCESS,
-  payload,
+  payload: userId,
 });
 
-const errorOccurred = err => ({
-  type: AUTHENTICATION_ERROR,
-  payload: {
-    msg: err.response.statusText,
-    status: err.response.status,
-  },
-});
+export const logout = () => {
+  localStorage.removeItem('auth-token');
+  return {
+    type: AUTHENTICATION_LOGOUT,
+  };
+};
 
-export const logout = () => ({
-  type: AUTHENTICATION_LOGOUT,
-});
+const errorOccurred = err => {
+  localStorage.removeItem('auth-token');
+  return {
+    type: AUTHENTICATION_ERROR,
+    payload: {
+      msg: err.response.statusText,
+      status: err.response.status,
+    },
+  };
+};
 
 export const registerUser = values => async dispatch => {
   dispatch(setIsLoading());
   try {
     const res = await callApi(METHOD_POST, `${API_URL}/register`, values);
-    await dispatch(loadUser());
-    dispatch(authenticationSuccess(res.token));
+    localStorage.setItem('auth-token', res.token);
+    const userId = await dispatch(loadUser());
+    dispatch(authenticationSuccess(userId));
   } catch (err) {
     dispatch(errorOccurred(err));
   }
@@ -43,8 +50,9 @@ export const loginUser = values => async dispatch => {
   dispatch(setIsLoading());
   try {
     const res = await callApi(METHOD_POST, `${API_URL}/login`, values);
-    dispatch(authenticationSuccess(res.token));
-    await dispatch(loadUser());
+    localStorage.setItem('auth-token', res.token);
+    const userId = await dispatch(loadUser());
+    dispatch(authenticationSuccess(userId));
   } catch (err) {
     dispatch(errorOccurred(err));
   }
@@ -53,8 +61,8 @@ export const loginUser = values => async dispatch => {
 export const loginCurrentUser = () => async dispatch => {
   dispatch(setIsLoading());
   try {
-    await dispatch(loadUser());
-    dispatch(authenticationSuccess());
+    const userId = await dispatch(loadUser());
+    dispatch(authenticationSuccess(userId));
   } catch (err) {
     dispatch(errorOccurred(err));
   }

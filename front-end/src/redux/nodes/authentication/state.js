@@ -2,6 +2,7 @@ export const initialState = {
   isAuthenticated: false,
   isLoading: true,
   error: null,
+  userId: null,
 };
 
 export const isLoading = state => ({
@@ -9,34 +10,26 @@ export const isLoading = state => ({
   isLoading: true,
 });
 
-export const authenticationSuccess = (state, payload) => {
-  if (payload) {
-    localStorage.setItem('auth-token', payload);
-  }
-  return {
-    ...state,
-    isLoading: false,
-    error: null,
-    isAuthenticated: true,
-  };
-};
+export const authenticationSuccess = (state, payload) => ({
+  ...state,
+  isLoading: false,
+  error: null,
+  isAuthenticated: true,
+  userId: payload,
+});
 
-export const logout = state => {
-  localStorage.removeItem('auth-token');
-  return {
-    ...state,
-    isLoading: false,
-    error: null,
-    isAuthenticated: false,
-  };
-};
+export const logout = state => ({
+  ...state,
+  isLoading: false,
+  error: null,
+  isAuthenticated: false,
+  userId: null,
+});
 
-export const errorOccurred = (state, payload) => {
-  localStorage.removeItem('auth-token');
-  return {
-    ...state,
-    isLoading: false,
-    isAuthenticated: false,
-    error: payload,
-  };
-};
+export const errorOccurred = (state, payload) => ({
+  ...state,
+  isLoading: false,
+  isAuthenticated: false,
+  error: payload,
+  userId: null,
+});
