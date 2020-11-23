@@ -14,9 +14,9 @@ const App = () => {
         <CssBaseline />
         <Router>
           <Switch>
-            <Route exact path='/create-post' component={CreatePost} />
             <Route exact path='/register' component={Register} />
             <Route exact path='/login' component={Login} />
+            <PrivateRoute exact path='/create-post' component={CreatePost} />
             <PrivateRoute exact path='/' component={Home} />
           </Switch>
         </Router>

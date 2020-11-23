@@ -1,6 +1,7 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator');
 const Post = require('../models/Post');
+const { isAuthenticated } = require('../handlers');
 
 const postRouter = express.Router();
 
@@ -9,16 +10,20 @@ postRouter.get('/', async (req, res) => {
   const skip = (parseInt(req.query.page, 10) - 1) * limit;
 
   try {
-    const posts = await Post.find().skip(skip).limit(limit);
+    const posts = await Post.find()
+      .skip(skip)
+      .limit(limit)
+      .sort({ timestamp: -1 });
     res.json(posts);
   } catch (err) {
-    return res.status(500).send('Server error');
+    return res.status(500).json({ msg: 'Server error' });
   }
 });
 
 postRouter.post(
-  '/new',
+  '/create',
   [
+    isAuthenticated,
     check('title', 'Title is required').not().isEmpty(),
     check('content', 'Content is required').not().isEmpty(),
   ],
@@ -30,10 +35,18 @@ postRouter.post(
 
     const { title, content } = req.body;
 
-    console.log('Title:', title);
-    console.log('Content:', content);
+    try {
+      const post = new Post({
+        user: req.user.id,
+        title,
+        content,
+      });
 
-    res.send('Post created');
+      await post.save();
+      res.json({ msg: 'Post created successfully' });
+    } catch (err) {
+      return res.status(500).json({ msg: 'Server error' });
+    }
   }
 );
 

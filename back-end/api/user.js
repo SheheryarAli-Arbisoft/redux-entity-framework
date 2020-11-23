@@ -3,8 +3,18 @@ const { check, validationResult } = require('express-validator');
 const bcyrpt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { isAuthenticated } = require('../handlers');
 
 const userRouter = express.Router();
+
+userRouter.get('/current', isAuthenticated, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    res.json(user);
+  } catch (err) {
+    return res.status(500).json({ msg: 'Server error' });
+  }
+});
 
 userRouter.post('/', async (req, res) => {
   const { users } = req.body;
@@ -13,7 +23,7 @@ userRouter.post('/', async (req, res) => {
     const result = await User.find({ _id: { $in: users } });
     res.json(result);
   } catch (err) {
-    return res.status(500).send('Server error');
+    return res.status(500).json({ msg: 'Server error' });
   }
 });
 

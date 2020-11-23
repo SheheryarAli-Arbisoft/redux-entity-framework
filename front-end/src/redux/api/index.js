@@ -6,6 +6,7 @@ export const METHOD_POST = 'POST';
 const getHeaders = () => {
   return {
     'Content-Type': 'application/json',
+    'auth-token': localStorage.getItem('auth-token'),
   };
 };
 

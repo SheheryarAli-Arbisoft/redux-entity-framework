@@ -3,7 +3,7 @@ import { callApi, METHOD_POST } from '../../../api';
 const API_URL = '/api/comments';
 export const GET_COMMENTS_REQUEST = 'comments/GET_COMMENTS_REQUEST';
 export const GET_COMMENTS_SUCCESS = 'comments/GET_COMMENTS_SUCCESS';
-export const GET_COMMENTS_ERROR = 'comments/GET_COMMENTS_ERROR';
+export const COMMENTS_ERROR = 'comments/COMMENTS_ERROR';
 
 const setIsLoading = () => ({
   type: GET_COMMENTS_REQUEST,
@@ -15,7 +15,7 @@ const commentsLoaded = data => ({
 });
 
 const errorOccurred = err => ({
-  type: GET_COMMENTS_ERROR,
+  type: COMMENTS_ERROR,
   payload: {
     msg: err.response.statusText,
     status: err.response.status,

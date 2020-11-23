@@ -1,4 +1,5 @@
 import { callApi, METHOD_POST } from '../../api';
+import { loadUser } from '../entities/users/actions';
 
 const API_URL = '/api/users';
 export const AUTHENTICATION_REQUEST = 'authentication/AUTHENTICATION_REQUEST';
@@ -31,6 +32,7 @@ export const registerUser = values => async dispatch => {
   dispatch(setIsLoading());
   try {
     const res = await callApi(METHOD_POST, `${API_URL}/register`, values);
+    await dispatch(loadUser());
     dispatch(authenticationSuccess(res.token));
   } catch (err) {
     dispatch(errorOccurred(err));
@@ -41,6 +43,7 @@ export const loginUser = values => async dispatch => {
   dispatch(setIsLoading());
   try {
     const res = await callApi(METHOD_POST, `${API_URL}/login`, values);
+    await dispatch(loadUser());
     dispatch(authenticationSuccess(res.token));
   } catch (err) {
     dispatch(errorOccurred(err));

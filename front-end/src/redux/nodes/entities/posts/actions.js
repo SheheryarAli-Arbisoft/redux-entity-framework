@@ -7,7 +7,7 @@ import { getUsers } from '../users/selectors';
 const API_URL = '/api/posts';
 export const GET_POSTS_REQUEST = 'posts/GET_POSTS_REQUEST';
 export const GET_POSTS_SUCCESS = 'posts/GET_POSTS_SUCCESS';
-export const GET_POSTS_ERROR = 'posts/GET_POSTS_ERROR';
+export const POSTS_ERROR = 'posts/POSTS_ERROR';
 
 const setIsLoading = () => ({
   type: GET_POSTS_REQUEST,
@@ -19,7 +19,7 @@ const postsLoaded = data => ({
 });
 
 const errorOccurred = err => ({
-  type: GET_POSTS_ERROR,
+  type: POSTS_ERROR,
   payload: {
     msg: err.response.statusText,
     status: err.response.status,
@@ -82,7 +82,7 @@ export const loadPosts = (page, limit) => async (dispatch, getState) => {
 
 export const createPost = (values, history) => async dispatch => {
   try {
-    await callApi(METHOD_POST, `${API_URL}/new`, values);
+    await callApi(METHOD_POST, `${API_URL}/create`, values);
     history.push('/');
   } catch (err) {
     dispatch(errorOccurred(err));

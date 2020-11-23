@@ -1,9 +1,5 @@
 import { initialState, isLoading, loadPosts, errorOccurred } from './state';
-import {
-  GET_POSTS_REQUEST,
-  GET_POSTS_SUCCESS,
-  GET_POSTS_ERROR,
-} from './actions';
+import { GET_POSTS_REQUEST, GET_POSTS_SUCCESS, POSTS_ERROR } from './actions';
 
 export const posts = (state = initialState, action) => {
   const { type, payload } = action;
@@ -13,7 +9,7 @@ export const posts = (state = initialState, action) => {
       return isLoading(state);
     case GET_POSTS_SUCCESS:
       return loadPosts(state, payload);
-    case GET_POSTS_ERROR:
+    case POSTS_ERROR:
       return errorOccurred(state, payload);
     default:
       return state;
