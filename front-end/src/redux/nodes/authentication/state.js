@@ -10,7 +10,9 @@ export const isLoading = state => ({
 });
 
 export const authenticationSuccess = (state, payload) => {
-  localStorage.setItem('auth-token', payload);
+  if (payload) {
+    localStorage.setItem('auth-token', payload);
+  }
   return {
     ...state,
     isLoading: false,
@@ -19,12 +21,15 @@ export const authenticationSuccess = (state, payload) => {
   };
 };
 
-export const logout = state => ({
-  ...state,
-  isLoading: false,
-  error: null,
-  isAuthenticated: false,
-});
+export const logout = state => {
+  localStorage.removeItem('auth-token');
+  return {
+    ...state,
+    isLoading: false,
+    error: null,
+    isAuthenticated: false,
+  };
+};
 
 export const errorOccurred = (state, payload) => {
   localStorage.removeItem('auth-token');

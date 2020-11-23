@@ -9,7 +9,7 @@ const userRouter = express.Router();
 
 userRouter.get('/current', isAuthenticated, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id).select('-password');
     res.json(user);
   } catch (err) {
     return res.status(500).json({ msg: 'Server error' });
@@ -20,7 +20,7 @@ userRouter.post('/', async (req, res) => {
   const { users } = req.body;
 
   try {
-    const result = await User.find({ _id: { $in: users } });
+    const result = await User.find({ _id: { $in: users } }).select('-password');
     res.json(result);
   } catch (err) {
     return res.status(500).json({ msg: 'Server error' });

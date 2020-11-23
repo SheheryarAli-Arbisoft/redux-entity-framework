@@ -37,6 +37,7 @@ export const loadUser = () => async dispatch => {
     dispatch(userLoaded(user));
   } catch (err) {
     dispatch(errorOccurred(err));
+    throw err;
   }
 };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +11,10 @@ import {
 import { Text } from '../components/Text';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
-import { loginUser } from '../redux/nodes/authentication/actions';
+import {
+  loginUser,
+  loginCurrentUser,
+} from '../redux/nodes/authentication/actions';
 import { getData } from '../redux/nodes/authentication/selectors';
 
 export const Login = () => {
@@ -30,6 +33,10 @@ export const Login = () => {
       dispatch(loginUser(values));
     },
   });
+
+  useEffect(() => {
+    dispatch(loginCurrentUser());
+  }, []);
 
   if (!isLoading && isAuthenticated) {
     return <Redirect to='/' />;

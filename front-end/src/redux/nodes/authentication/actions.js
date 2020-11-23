@@ -11,7 +11,7 @@ const setIsLoading = () => ({
   type: AUTHENTICATION_REQUEST,
 });
 
-const authenticationSuccess = payload => ({
+const authenticationSuccess = (payload = null) => ({
   type: AUTHENTICATION_SUCCESS,
   payload,
 });
@@ -43,8 +43,18 @@ export const loginUser = values => async dispatch => {
   dispatch(setIsLoading());
   try {
     const res = await callApi(METHOD_POST, `${API_URL}/login`, values);
-    await dispatch(loadUser());
     dispatch(authenticationSuccess(res.token));
+    await dispatch(loadUser());
+  } catch (err) {
+    dispatch(errorOccurred(err));
+  }
+};
+
+export const loginCurrentUser = () => async dispatch => {
+  dispatch(setIsLoading());
+  try {
+    await dispatch(loadUser());
+    dispatch(authenticationSuccess());
   } catch (err) {
     dispatch(errorOccurred(err));
   }
