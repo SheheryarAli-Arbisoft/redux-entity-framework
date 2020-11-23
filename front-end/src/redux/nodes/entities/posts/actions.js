@@ -1,8 +1,8 @@
 import { callApi, METHOD_GET, METHOD_POST, METHOD_PUT } from '../../../api';
-import { loadComments } from '../comments/actions';
-import { getComments } from '../comments/selectors';
-import { loadUsers } from '../users/actions';
-import { getUsers } from '../users/selectors';
+// import { loadComments } from '../comments/actions';
+// import { getComments } from '../comments/selectors';
+// import { loadUsers } from '../users/actions';
+// import { getUsers } from '../users/selectors';
 
 const API_URL = '/api/posts';
 export const GET_POSTS_REQUEST = 'posts/GET_POSTS_REQUEST';
@@ -32,53 +32,53 @@ const errorOccurred = err => ({
   },
 });
 
-const getCommentList = posts => {
-  const result = [];
-  posts.forEach(post => {
-    post.comments.forEach(comment => {
-      if (!result.includes(comment.comment)) {
-        result.push(comment.comment);
-      }
-    });
-  });
-  return result;
-};
+// const getCommentList = posts => {
+//   const result = [];
+//   posts.forEach(post => {
+//     post.comments.forEach(comment => {
+//       if (!result.includes(comment.comment)) {
+//         result.push(comment.comment);
+//       }
+//     });
+//   });
+//   return result;
+// };
 
-const getUsersList = (posts, comments, getState) => {
-  const { data: users } = getUsers(getState());
-  const loadedUsers = users.map(user => user._id);
+// const getUsersList = (posts, comments, getState) => {
+//   const { data: users } = getUsers(getState());
+//   const loadedUsers = users.map(user => user._id);
 
-  const result = [];
-  posts.forEach(post => {
-    if (!result.includes(post.user) && !loadedUsers.includes(post.user)) {
-      result.push(post.user);
-    }
-    post.likes.forEach(like => {
-      if (!result.includes(like.user) && !loadedUsers.includes(like.user)) {
-        result.push(like.user);
-      }
-    });
-  });
-  comments.forEach(comment => {
-    if (!result.includes(comment.user) && !loadedUsers.includes(comment.user)) {
-      result.push(comment.user);
-    }
-  });
-  return result;
-};
+//   const result = [];
+//   posts.forEach(post => {
+//     if (!result.includes(post.user) && !loadedUsers.includes(post.user)) {
+//       result.push(post.user);
+//     }
+//     post.likes.forEach(like => {
+//       if (!result.includes(like.user) && !loadedUsers.includes(like.user)) {
+//         result.push(like.user);
+//       }
+//     });
+//   });
+//   comments.forEach(comment => {
+//     if (!result.includes(comment.user) && !loadedUsers.includes(comment.user)) {
+//       result.push(comment.user);
+//     }
+//   });
+//   return result;
+// };
 
-export const loadPosts = (page, limit) => async (dispatch, getState) => {
+export const loadPosts = (page, limit) => async dispatch => {
   dispatch(setIsLoading());
 
   try {
     const posts = await callApi(METHOD_GET, API_URL, {}, { page, limit });
 
-    const commentsList = getCommentList(posts);
-    await dispatch(loadComments(commentsList));
-    const { data: comments } = getComments(getState());
+    // const commentsList = getCommentList(posts);
+    // await dispatch(loadComments(commentsList));
+    // const { data: comments } = getComments(getState());
 
-    const usersList = getUsersList(posts, comments, getState);
-    await dispatch(loadUsers(usersList));
+    // const usersList = getUsersList(posts, comments, getState);
+    // await dispatch(loadUsers(usersList));
 
     dispatch(postsLoaded(posts));
   } catch (err) {

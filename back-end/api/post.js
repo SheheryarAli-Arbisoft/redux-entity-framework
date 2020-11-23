@@ -10,11 +10,16 @@ postRouter.get('/', async (req, res) => {
   const skip = (parseInt(req.query.page, 10) - 1) * limit;
 
   try {
+    const result = {};
     const posts = await Post.find()
       .skip(skip)
       .limit(limit)
       .sort({ timestamp: -1 });
-    res.json(posts);
+
+    posts.forEach(post => {
+      result[post.id] = post;
+    });
+    res.json(result);
   } catch (err) {
     return res.status(500).json({ msg: 'Server error' });
   }

@@ -1,5 +1,5 @@
 export const initialState = {
-  data: [],
+  data: {},
   isLoading: true,
   error: null,
 };
@@ -11,7 +11,7 @@ export const isLoading = state => ({
 
 export const loadPosts = (state, payload) => ({
   ...state,
-  data: [...state.data, ...payload],
+  data: { ...state.data, ...payload },
   isLoading: false,
   error: null,
 });
