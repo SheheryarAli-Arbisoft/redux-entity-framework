@@ -13,7 +13,7 @@ export const Card = ({ post, ...rest }) => {
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
-    setLiked(likes.map(like => like.user).indexOf(userId) !== -1);
+    setLiked(likes.indexOf(userId) !== -1);
   }, [likes]);
 
   return (
