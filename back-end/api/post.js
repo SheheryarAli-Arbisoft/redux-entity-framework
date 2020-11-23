@@ -50,4 +50,32 @@ postRouter.post(
   }
 );
 
+postRouter.put('/like/:post_id', isAuthenticated, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+    const index = post.likes.map(like => like.user).indexOf(req.user.id);
+    if (index === -1) {
+      post.likes.push({ user: req.user.id });
+    }
+    await post.save();
+    res.json(post);
+  } catch (err) {
+    return res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+postRouter.put('/unlike/:post_id', isAuthenticated, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+    const removeIndex = post.likes.map(like => like.user).indexOf(req.user.id);
+    if (removeIndex !== -1) {
+      post.likes.splice(removeIndex, 1);
+    }
+    await post.save();
+    res.json(post);
+  } catch (err) {
+    return res.status(500).json({ msg: 'Server error' });
+  }
+});
+
 module.exports = { postRouter };

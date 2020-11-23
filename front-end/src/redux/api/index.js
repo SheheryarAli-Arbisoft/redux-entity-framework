@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export const METHOD_GET = 'GET';
 export const METHOD_POST = 'POST';
+export const METHOD_PUT = 'PUT';
 
 const getHeaders = () => {
   return {

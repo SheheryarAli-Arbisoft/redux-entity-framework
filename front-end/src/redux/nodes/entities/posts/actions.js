@@ -1,4 +1,4 @@
-import { callApi, METHOD_GET, METHOD_POST } from '../../../api';
+import { callApi, METHOD_GET, METHOD_POST, METHOD_PUT } from '../../../api';
 import { loadComments } from '../comments/actions';
 import { getComments } from '../comments/selectors';
 import { loadUsers } from '../users/actions';
@@ -7,6 +7,7 @@ import { getUsers } from '../users/selectors';
 const API_URL = '/api/posts';
 export const GET_POSTS_REQUEST = 'posts/GET_POSTS_REQUEST';
 export const GET_POSTS_SUCCESS = 'posts/GET_POSTS_SUCCESS';
+export const POST_LIKED = 'posts/POST_LIKED';
 export const POSTS_ERROR = 'posts/POSTS_ERROR';
 
 const setIsLoading = () => ({
@@ -16,6 +17,11 @@ const setIsLoading = () => ({
 const postsLoaded = data => ({
   type: GET_POSTS_SUCCESS,
   payload: data,
+});
+
+const postLiked = post => ({
+  type: POST_LIKED,
+  payload: post,
 });
 
 const errorOccurred = err => ({
@@ -84,6 +90,15 @@ export const createPost = (values, history) => async dispatch => {
   try {
     await callApi(METHOD_POST, `${API_URL}/create`, values);
     history.push('/');
+  } catch (err) {
+    dispatch(errorOccurred(err));
+  }
+};
+
+export const likePost = postId => async dispatch => {
+  try {
+    const post = await callApi(METHOD_PUT, `${API_URL}/like/${postId}`);
+    dispatch(postLiked(post));
   } catch (err) {
     dispatch(errorOccurred(err));
   }

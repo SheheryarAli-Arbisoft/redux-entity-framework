@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { StyledCard, StyledCardContent, StyledWrapper } from './styled';
 import { propTypes, defaultProps } from './props';
 import { Text } from '../Text';
+import { likePost } from '../../redux/nodes/entities/posts/actions';
 
 export const Card = ({ post, ...rest }) => {
-  const { title, content, likes } = post;
-  const [liked, setLiked] = useState(false);
+  const dispatch = useDispatch();
+  const { _id, title, content, likes, comments } = post;
 
   return (
     <StyledCard {...rest}>
@@ -14,10 +16,11 @@ export const Card = ({ post, ...rest }) => {
           {title}
         </Text>
         <Text variant='body2'>{content}</Text>
-        <StyledWrapper onClick={() => setLiked(value => !value)}>
-          <i className={`fa${liked ? 's' : 'r'} fa-thumbs-up`} />
+        <StyledWrapper onClick={() => dispatch(likePost(_id))}>
+          <i className='fas fa-thumbs-up' />
           {`${likes.length} likes`}
         </StyledWrapper>
+        <StyledWrapper>{`${comments.length} comments`}</StyledWrapper>
       </StyledCardContent>
     </StyledCard>
   );
