@@ -36,3 +36,11 @@ export const loadComments = (commentsList = []) => async dispatch => {
     dispatch(errorOccurred(err));
   }
 };
+
+export const createComment = (postId, values) => async dispatch => {
+  try {
+    await callApi(METHOD_POST, `${API_URL}/create/${postId}`, values);
+  } catch (err) {
+    dispatch(errorOccurred(err));
+  }
+};

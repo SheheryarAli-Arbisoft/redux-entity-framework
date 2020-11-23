@@ -10,7 +10,7 @@ export const StyledCardContent = styled(CardContent)`
   flex-direction: column;
 `;
 
-export const StyledWrapper = styled.button`
+export const StyledButton = styled.button`
   width: 100%;
   display: flex;
   align-items: center;
@@ -24,4 +24,18 @@ export const StyledWrapper = styled.button`
   &:focus {
     outline: none;
   }
+`;
+
+export const StyledForm = styled.form`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const StyledInput = styled.input`
+  margin: 10px 0;
+  font-size: 15px;
+  padding: 8px;
+  flex-grow: 1;
 `;
