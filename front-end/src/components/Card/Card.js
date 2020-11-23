@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getData } from '../../redux/nodes/authentication/selectors';
 import { likePost, unlikePost } from '../../redux/nodes/entities/posts/actions';
 import { createComment } from '../../redux/nodes/entities/comments/actions';
+import { getComments } from '../../redux/nodes/entities/comments/selectors';
 import {
   StyledCard,
   StyledCardContent,
@@ -16,9 +17,9 @@ import { Text } from '../Text';
 import { Button } from '../Button';
 
 export const Card = ({ post, ...rest }) => {
-  const { _id, title, content, likes, comments } = post;
   const dispatch = useDispatch();
   const { userId } = useSelector(getData);
+  const { comments } = useSelector(getComments);
   const [liked, setLiked] = useState(false);
   const {
     values: { comment },
@@ -30,29 +31,33 @@ export const Card = ({ post, ...rest }) => {
       comment: '',
     },
     onSubmit: values => {
-      dispatch(createComment(_id, values));
+      dispatch(createComment(post._id, values));
       handleReset();
     },
   });
 
   useEffect(() => {
-    setLiked(likes.indexOf(userId) !== -1);
-  }, [likes]);
+    setLiked(post.likes.indexOf(userId) !== -1);
+  }, [post.likes]);
 
   return (
     <StyledCard {...rest}>
       <StyledCardContent>
         <Text variant='h5' gutterBottom>
-          {title}
+          {post.title}
         </Text>
-        <Text variant='body2'>{content}</Text>
+        <Text variant='body2'>{post.content}</Text>
         <StyledButton
-          onClick={() => dispatch(liked ? unlikePost(_id) : likePost(_id))}
+          onClick={() =>
+            dispatch(liked ? unlikePost(post._id) : likePost(post._id))
+          }
         >
           <i className={`fa${liked ? 's' : 'r'} fa-thumbs-up`} />
-          {`${likes.length} likes`}
+          {`${post.likes.length} likes`}
         </StyledButton>
-        <div style={{ fontSize: '16px' }}>{`${comments.length} comments`}</div>
+        <div style={{ fontSize: '16px' }}>
+          {`${post.comments.length} comments`}
+        </div>
         <StyledForm onSubmit={handleSubmit}>
           <StyledInput
             name='comment'
@@ -62,6 +67,9 @@ export const Card = ({ post, ...rest }) => {
           />
           <Button type='submit'>Submit</Button>
         </StyledForm>
+        {post.comments.map(commentId => (
+          <div>{comments[commentId].content}</div>
+        ))}
       </StyledCardContent>
     </StyledCard>
   );

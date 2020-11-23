@@ -1,21 +1,21 @@
 import { callApi, METHOD_POST } from '../../../api';
 
 const API_URL = '/api/comments';
-export const GET_COMMENTS_REQUEST = 'comments/GET_COMMENTS_REQUEST';
-export const GET_COMMENTS_SUCCESS = 'comments/GET_COMMENTS_SUCCESS';
-export const COMMENTS_ERROR = 'comments/COMMENTS_ERROR';
+export const LOAD_REQUEST = 'comments/LOAD_REQUEST';
+export const LOAD_SUCCESS = 'comments/LOAD_SUCCESS';
+export const ERROR = 'comments/ERROR';
 
-const setIsLoading = () => ({
-  type: GET_COMMENTS_REQUEST,
+const loadRequest = () => ({
+  type: LOAD_REQUEST,
 });
 
-const commentsLoaded = data => ({
-  type: GET_COMMENTS_SUCCESS,
+const loadSuccess = data => ({
+  type: LOAD_SUCCESS,
   payload: data,
 });
 
-const errorOccurred = err => ({
-  type: COMMENTS_ERROR,
+const error = err => ({
+  type: ERROR,
   payload: {
     msg: err.response.statusText,
     status: err.response.status,
@@ -23,7 +23,7 @@ const errorOccurred = err => ({
 });
 
 export const loadComments = (commentsList = []) => async dispatch => {
-  dispatch(setIsLoading());
+  dispatch(loadRequest());
 
   const body = {
     comments: commentsList,
@@ -31,9 +31,9 @@ export const loadComments = (commentsList = []) => async dispatch => {
 
   try {
     const comments = await callApi(METHOD_POST, API_URL, body);
-    dispatch(commentsLoaded(comments));
+    dispatch(loadSuccess(comments));
   } catch (err) {
-    dispatch(errorOccurred(err));
+    dispatch(error(err));
   }
 };
 
@@ -41,6 +41,6 @@ export const createComment = (postId, values) => async dispatch => {
   try {
     await callApi(METHOD_POST, `${API_URL}/create/${postId}`, values);
   } catch (err) {
-    dispatch(errorOccurred(err));
+    dispatch(error(err));
   }
 };

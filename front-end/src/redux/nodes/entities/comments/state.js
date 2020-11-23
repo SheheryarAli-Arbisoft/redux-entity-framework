@@ -1,22 +1,22 @@
 export const initialState = {
-  data: [],
+  data: {},
   isLoading: true,
   error: null,
 };
 
-export const isLoading = state => ({
+export const loadRequest = state => ({
   ...state,
   isLoading: true,
 });
 
-export const loadComments = (state, payload) => ({
+export const loadSuccess = (state, payload) => ({
   ...state,
-  data: [...state.data, ...payload],
+  data: { ...state.data, ...payload },
   isLoading: false,
   error: null,
 });
 
-export const errorOccurred = (state, payload) => ({
+export const error = (state, payload) => ({
   ...state,
   isLoading: false,
   error: payload,

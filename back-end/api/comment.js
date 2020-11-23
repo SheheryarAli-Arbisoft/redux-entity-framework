@@ -36,10 +36,15 @@ commentRouter.post(
 );
 
 commentRouter.post('/', async (req, res) => {
-  const { comments } = req.body;
+  const { comments: commentsList } = req.body;
 
   try {
-    const result = await Comment.find({ _id: { $in: comments } });
+    const result = {};
+    const comments = await Comment.find({ _id: { $in: commentsList } });
+
+    comments.forEach(comment => {
+      result[comment.id] = comment;
+    });
     res.json(result);
   } catch (err) {
     return res.status(500).json({ msg: 'Server error' });

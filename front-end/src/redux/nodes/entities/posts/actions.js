@@ -1,5 +1,5 @@
 import { callApi, METHOD_GET, METHOD_POST, METHOD_PUT } from '../../../api';
-// import { loadComments } from '../comments/actions';
+import { loadComments } from '../comments/actions';
 // import { getComments } from '../comments/selectors';
 // import { loadUsers } from '../users/actions';
 // import { getUsers } from '../users/selectors';
@@ -32,17 +32,16 @@ const error = err => ({
   },
 });
 
-// const getCommentList = posts => {
-//   const result = [];
-//   posts.forEach(post => {
-//     post.comments.forEach(comment => {
-//       if (!result.includes(comment.comment)) {
-//         result.push(comment.comment);
-//       }
-//     });
-//   });
-//   return result;
-// };
+const getCommentList = posts => {
+  const result = [];
+  Object.values(posts).forEach(post => {
+    result.push(...post.comments);
+  });
+  // posts.forEach(post => {
+  //   result.push(...post.comments);
+  // });
+  return result;
+};
 
 // const getUsersList = (posts, comments, getState) => {
 //   const { data: users } = getUsers(getState());
@@ -73,8 +72,8 @@ export const loadPosts = (page, limit) => async dispatch => {
   try {
     const posts = await callApi(METHOD_GET, API_URL, {}, { page, limit });
 
-    // const commentsList = getCommentList(posts);
-    // await dispatch(loadComments(commentsList));
+    const commentsList = getCommentList(posts);
+    await dispatch(loadComments(commentsList));
     // const { data: comments } = getComments(getState());
 
     // const usersList = getUsersList(posts, comments, getState);
