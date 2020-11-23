@@ -16,19 +16,12 @@ export const loadSuccess = (state, payload) => ({
   error: null,
 });
 
-export const postLikedStatusChanged = (state, post) => ({
+export const likedStatusChanged = (state, post) => ({
   ...state,
-  data: [
-    ...state.data.map(item => {
-      if (item._id === post._id) {
-        item.likes = post.likes;
-      }
-      return item;
-    }),
-  ],
+  data: { ...state.data, [post._id]: post },
 });
 
-export const errorOccurred = (state, payload) => ({
+export const error = (state, payload) => ({
   ...state,
   isLoading: false,
   error: payload,

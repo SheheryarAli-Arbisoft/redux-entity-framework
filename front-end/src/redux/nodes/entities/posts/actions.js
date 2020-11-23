@@ -5,30 +5,27 @@ import { callApi, METHOD_GET, METHOD_POST, METHOD_PUT } from '../../../api';
 // import { getUsers } from '../users/selectors';
 
 const API_URL = '/api/posts';
-export const GET_POSTS_REQUEST = 'posts/GET_POSTS_REQUEST';
-export const GET_POSTS_SUCCESS = 'posts/GET_POSTS_SUCCESS';
-export const POST_LIKED_STATUS_CHANGED = 'posts/POST_LIKED_STATUS_CHANGED';
-export const POSTS_ERROR = 'posts/POSTS_ERROR';
 export const LOAD_REQUEST = 'posts/LOAD_REQUEST';
 export const LOAD_SUCCESS = 'posts/LOAD_SUCCESS';
+export const LIKED_STATUS_CHANGED = 'posts/LIKED_STATUS_CHANGED';
 export const ERROR = 'posts/ERROR';
 
-// const setIsLoading = () => ({
-//   type: GET_POSTS_REQUEST,
-// });
+const loadRequest = () => ({
+  type: LOAD_REQUEST,
+});
 
-// const postsLoaded = data => ({
-//   type: GET_POSTS_SUCCESS,
-//   payload: data,
-// });
+const loadSuccess = posts => ({
+  type: LOAD_SUCCESS,
+  payload: posts,
+});
 
-const postLikedStatusChanged = post => ({
-  type: POST_LIKED_STATUS_CHANGED,
+const likedStatusChanged = post => ({
+  type: LIKED_STATUS_CHANGED,
   payload: post,
 });
 
-const errorOccurred = err => ({
-  type: POSTS_ERROR,
+const error = err => ({
+  type: ERROR,
   payload: {
     msg: err.response.statusText,
     status: err.response.status,
@@ -70,15 +67,6 @@ const errorOccurred = err => ({
 //   return result;
 // };
 
-const loadRequest = () => ({
-  type: LOAD_REQUEST,
-});
-
-const loadSuccess = posts => ({
-  type: LOAD_SUCCESS,
-  payload: posts,
-});
-
 export const loadPosts = (page, limit) => async dispatch => {
   dispatch(loadRequest());
 
@@ -95,33 +83,33 @@ export const loadPosts = (page, limit) => async dispatch => {
     dispatch(loadSuccess(posts));
     return Object.keys(posts);
   } catch (err) {
-    dispatch(errorOccurred(err));
+    dispatch(error(err));
   }
 };
 
 export const createPost = (values, history) => async dispatch => {
   try {
     await callApi(METHOD_POST, `${API_URL}/create`, values);
-    history.push('/');
+    history.goBack();
   } catch (err) {
-    dispatch(errorOccurred(err));
+    dispatch(error(err));
   }
 };
 
 export const likePost = postId => async dispatch => {
   try {
     const post = await callApi(METHOD_PUT, `${API_URL}/like/${postId}`);
-    dispatch(postLikedStatusChanged(post));
+    dispatch(likedStatusChanged(post));
   } catch (err) {
-    dispatch(errorOccurred(err));
+    dispatch(error(err));
   }
 };
 
 export const unlikePost = postId => async dispatch => {
   try {
     const post = await callApi(METHOD_PUT, `${API_URL}/unlike/${postId}`);
-    dispatch(postLikedStatusChanged(post));
+    dispatch(likedStatusChanged(post));
   } catch (err) {
-    dispatch(errorOccurred(err));
+    dispatch(error(err));
   }
 };
