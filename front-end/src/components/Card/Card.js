@@ -68,7 +68,7 @@ export const Card = ({ post, ...rest }) => {
           <Button type='submit'>Submit</Button>
         </StyledForm>
         {post.comments.map(commentId => (
-          <div>{comments[commentId].content}</div>
+          <div key={commentId}>{comments[commentId].content}</div>
         ))}
       </StyledCardContent>
     </StyledCard>

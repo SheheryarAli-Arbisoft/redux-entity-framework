@@ -1,28 +1,28 @@
 import { callApi, METHOD_GET, METHOD_POST } from '../../../api';
 
 const API_URL = '/api/users';
-export const GET_USER_REQUEST = 'users/GET_USER_REQUEST';
-export const GET_USER_SUCCESS = 'users/GET_USER_SUCCESS';
-export const GET_USERS_REQUEST = 'users/GET_USERS_REQUEST';
-export const GET_USERS_SUCCESS = 'users/GET_USERS_SUCCESS';
-export const USERS_ERROR = 'users/USERS_ERROR';
+export const LOAD_USER_REQUEST = 'users/LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'users/LOAD_USER_SUCCESS';
+export const LOAD_USERS_REQUEST = 'users/LOAD_USERS_REQUEST';
+export const LOAD_USERS_SUCCESS = 'users/LOAD_USERS_SUCCESS';
+export const ERROR = 'users/ERROR';
 
 const setIsLoading = type => ({
   type,
 });
 
-const userLoaded = user => ({
-  type: GET_USER_SUCCESS,
+const loadUserSuccess = user => ({
+  type: LOAD_USER_SUCCESS,
   payload: user,
 });
 
-const usersLoaded = data => ({
-  type: GET_USERS_SUCCESS,
+const loadUsersSuccess = data => ({
+  type: LOAD_USERS_SUCCESS,
   payload: data,
 });
 
-const errorOccurred = err => ({
-  type: USERS_ERROR,
+const error = err => ({
+  type: ERROR,
   payload: {
     msg: err.response.statusText,
     status: err.response.status,
@@ -30,20 +30,20 @@ const errorOccurred = err => ({
 });
 
 export const loadUser = () => async dispatch => {
-  dispatch(setIsLoading(GET_USER_REQUEST));
+  dispatch(setIsLoading(LOAD_USER_REQUEST));
 
   try {
     const user = await callApi(METHOD_GET, `${API_URL}/current`);
-    dispatch(userLoaded(user));
+    dispatch(loadUserSuccess(user));
     return user._id;
   } catch (err) {
-    dispatch(errorOccurred(err));
+    dispatch(error(err));
     throw err;
   }
 };
 
 export const loadUsers = (usersList = []) => async dispatch => {
-  dispatch(setIsLoading(GET_USERS_REQUEST));
+  dispatch(setIsLoading(LOAD_USERS_REQUEST));
 
   const body = {
     users: usersList,
@@ -51,8 +51,8 @@ export const loadUsers = (usersList = []) => async dispatch => {
 
   try {
     const users = await callApi(METHOD_POST, API_URL, body);
-    dispatch(usersLoaded(users));
+    dispatch(loadUsersSuccess(users));
   } catch (err) {
-    dispatch(errorOccurred(err));
+    dispatch(error(err));
   }
 };

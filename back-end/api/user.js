@@ -17,10 +17,17 @@ userRouter.get('/current', isAuthenticated, async (req, res) => {
 });
 
 userRouter.post('/', async (req, res) => {
-  const { users } = req.body;
+  const { users: usersList } = req.body;
 
   try {
-    const result = await User.find({ _id: { $in: users } }).select('-password');
+    const result = {};
+    const users = await User.find({ _id: { $in: usersList } }).select(
+      '-password'
+    );
+
+    users.forEach(user => {
+      result[user.id] = user;
+    });
     res.json(result);
   } catch (err) {
     return res.status(500).json({ msg: 'Server error' });

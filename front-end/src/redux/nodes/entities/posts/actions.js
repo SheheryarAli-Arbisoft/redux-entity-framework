@@ -1,8 +1,8 @@
 import { callApi, METHOD_GET, METHOD_POST, METHOD_PUT } from '../../../api';
 import { loadComments } from '../comments/actions';
-// import { getComments } from '../comments/selectors';
-// import { loadUsers } from '../users/actions';
-// import { getUsers } from '../users/selectors';
+import { getComments } from '../comments/selectors';
+import { loadUsers } from '../users/actions';
+import { getUsers } from '../users/selectors';
 
 const API_URL = '/api/posts';
 export const LOAD_REQUEST = 'posts/LOAD_REQUEST';
@@ -33,46 +33,43 @@ const error = err => ({
   },
 });
 
-const getCommentList = posts => {
-  const result = [];
-  Object.values(posts).forEach(post => {
-    result.push(...post.comments);
-  });
-  // posts.forEach(post => {
-  //   result.push(...post.comments);
-  // });
-  return result;
-};
-
 export const commentAdded = (postId, commentId) => ({
   type: COMMENT_ADDED,
   payload: { postId, commentId },
 });
 
-// const getUsersList = (posts, comments, getState) => {
-//   const { data: users } = getUsers(getState());
-//   const loadedUsers = users.map(user => user._id);
+const getCommentList = posts => {
+  const result = [];
+  Object.values(posts).forEach(post => {
+    result.push(...post.comments);
+  });
+  return result;
+};
 
-//   const result = [];
-//   posts.forEach(post => {
-//     if (!result.includes(post.user) && !loadedUsers.includes(post.user)) {
-//       result.push(post.user);
-//     }
-//     post.likes.forEach(like => {
-//       if (!result.includes(like.user) && !loadedUsers.includes(like.user)) {
-//         result.push(like.user);
-//       }
-//     });
-//   });
-//   comments.forEach(comment => {
-//     if (!result.includes(comment.user) && !loadedUsers.includes(comment.user)) {
-//       result.push(comment.user);
-//     }
-//   });
-//   return result;
-// };
+const getUsersList = (posts, comments, getState) => {
+  const { users } = getUsers(getState());
+  const loadedUsers = Object.keys(users);
 
-export const loadPosts = (page, limit) => async dispatch => {
+  const result = [];
+  Object.values(posts).forEach(post => {
+    if (!result.includes(post.user) && !loadedUsers.includes(post.user)) {
+      result.push(post.user);
+    }
+    post.likes.forEach(user => {
+      if (!result.includes(user) && !loadedUsers.includes(user)) {
+        result.push(user);
+      }
+    });
+  });
+  Object.values(comments).forEach(comment => {
+    if (!result.includes(comment.user) && !loadedUsers.includes(comment.user)) {
+      result.push(comment.user);
+    }
+  });
+  return result;
+};
+
+export const loadPosts = (page, limit) => async (dispatch, getState) => {
   dispatch(loadRequest());
 
   try {
@@ -80,10 +77,10 @@ export const loadPosts = (page, limit) => async dispatch => {
 
     const commentsList = getCommentList(posts);
     await dispatch(loadComments(commentsList));
-    // const { data: comments } = getComments(getState());
+    const { comments } = getComments(getState());
 
-    // const usersList = getUsersList(posts, comments, getState);
-    // await dispatch(loadUsers(usersList));
+    const usersList = getUsersList(posts, comments, getState);
+    await dispatch(loadUsers(usersList));
 
     dispatch(loadSuccess(posts));
     return Object.keys(posts);

@@ -1,31 +1,31 @@
 import {
   initialState,
-  isLoading,
-  loadUser,
-  loadUsers,
-  errorOccurred,
+  loading,
+  loadUserSuccess,
+  loadUsersSuccess,
+  error,
 } from './state';
 import {
-  GET_USER_REQUEST,
-  GET_USER_SUCCESS,
-  GET_USERS_REQUEST,
-  GET_USERS_SUCCESS,
-  USERS_ERROR,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
+  LOAD_USERS_REQUEST,
+  LOAD_USERS_SUCCESS,
+  ERROR,
 } from './actions';
 
 export const users = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case GET_USERS_REQUEST:
-    case GET_USER_REQUEST:
-      return isLoading(state);
-    case GET_USER_SUCCESS:
-      return loadUser(state, payload);
-    case GET_USERS_SUCCESS:
-      return loadUsers(state, payload);
-    case USERS_ERROR:
-      return errorOccurred(state, payload);
+    case LOAD_USER_REQUEST:
+    case LOAD_USERS_REQUEST:
+      return loading(state);
+    case LOAD_USER_SUCCESS:
+      return loadUserSuccess(state, payload);
+    case LOAD_USERS_SUCCESS:
+      return loadUsersSuccess(state, payload);
+    case ERROR:
+      return error(state, payload);
     default:
       return state;
   }
