@@ -4,7 +4,7 @@ export const initialState = {
   error: null,
 };
 
-export const loadRequest = state => ({
+export const loading = state => ({
   ...state,
   isLoading: true,
 });
@@ -14,6 +14,13 @@ export const loadSuccess = (state, payload) => ({
   data: { ...state.data, ...payload },
   isLoading: false,
   error: null,
+});
+
+export const createSuccess = (state, payload) => ({
+  ...state,
+  isLoading: false,
+  error: null,
+  data: { ...state.data, [payload._id]: payload },
 });
 
 export const error = (state, payload) => ({

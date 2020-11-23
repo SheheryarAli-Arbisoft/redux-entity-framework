@@ -3,12 +3,14 @@ import {
   loadRequest,
   loadSuccess,
   likedStatusChanged,
+  commentAdded,
   error,
 } from './state';
 import {
   LOAD_REQUEST,
   LOAD_SUCCESS,
   LIKED_STATUS_CHANGED,
+  COMMENT_ADDED,
   ERROR,
 } from './actions';
 
@@ -22,6 +24,8 @@ export const posts = (state = initialState, action) => {
       return loadSuccess(state, payload);
     case LIKED_STATUS_CHANGED:
       return likedStatusChanged(state, payload);
+    case COMMENT_ADDED:
+      return commentAdded(state, payload);
     case ERROR:
       return error(state, payload);
     default:

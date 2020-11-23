@@ -8,6 +8,7 @@ const API_URL = '/api/posts';
 export const LOAD_REQUEST = 'posts/LOAD_REQUEST';
 export const LOAD_SUCCESS = 'posts/LOAD_SUCCESS';
 export const LIKED_STATUS_CHANGED = 'posts/LIKED_STATUS_CHANGED';
+export const COMMENT_ADDED = 'posts/COMMENT_ADDED';
 export const ERROR = 'posts/ERROR';
 
 const loadRequest = () => ({
@@ -42,6 +43,11 @@ const getCommentList = posts => {
   // });
   return result;
 };
+
+export const commentAdded = (postId, commentId) => ({
+  type: COMMENT_ADDED,
+  payload: { postId, commentId },
+});
 
 // const getUsersList = (posts, comments, getState) => {
 //   const { data: users } = getUsers(getState());

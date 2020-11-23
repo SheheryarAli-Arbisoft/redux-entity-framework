@@ -21,6 +21,17 @@ export const likedStatusChanged = (state, post) => ({
   data: { ...state.data, [post._id]: post },
 });
 
+export const commentAdded = (state, { postId, commentId }) => ({
+  ...state,
+  data: {
+    ...state.data,
+    [postId]: {
+      ...state.data[postId],
+      comments: [...state.data[postId].comments, commentId],
+    },
+  },
+});
+
 export const error = (state, payload) => ({
   ...state,
   isLoading: false,
