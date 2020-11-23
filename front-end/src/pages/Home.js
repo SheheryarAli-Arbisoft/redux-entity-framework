@@ -3,9 +3,10 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadPostFeed } from '../redux/nodes/features/postFeed/actions';
 import { getPostFeed } from '../redux/nodes/features/postFeed/selectors';
+import { getPosts } from '../redux/nodes/entities/posts/selectors';
 import { Navbar } from '../components/Navbar';
 import { Container } from '../components/Container';
-// import { Card } from '../components/Card';
+import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { LoadingIndicator } from '../components/LoadingIndicator';
 
@@ -14,7 +15,8 @@ export const Home = () => {
   const history = useHistory();
   const [page] = useState(1);
   const [limit] = useState(10);
-  const { isLoading } = useSelector(getPostFeed);
+  const { isLoading, postIds } = useSelector(getPostFeed);
+  const { posts } = useSelector(getPosts);
 
   useEffect(() => {
     dispatch(loadPostFeed(page, limit));
@@ -30,10 +32,12 @@ export const Home = () => {
         >
           Create post
         </Button>
+
+        {postIds.map(postId => (
+          <Card key={postId} post={posts[postId]} />
+        ))}
+
         {isLoading && <LoadingIndicator />}
-        {/* {data.map(post => (
-          <Card key={post._id} post={post} />
-        ))} */}
         {/* {isLoading ? (
           <LoadingIndicator />
         ) : (
