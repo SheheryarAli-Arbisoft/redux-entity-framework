@@ -1,6 +1,5 @@
-import { callApi, METHOD_GET } from '../../../api';
+import { loadPosts } from '../../entities/posts/actions';
 
-const API_URL = '/api/posts';
 export const LOAD_REQUEST = 'postFeed/LOAD_REQUEST';
 export const LOAD_SUCCESS = 'postFeed/LOAD_SUCCESS';
 export const ERROR = 'postFeed/ERROR';
@@ -22,18 +21,11 @@ const errorOccurred = err => ({
   },
 });
 
-export const loadPosts = (page, pageSize) => async dispatch => {
+export const loadPostFeed = (page, pageSize) => async dispatch => {
   dispatch(loadRequest());
 
   try {
-    const posts = await callApi(
-      METHOD_GET,
-      API_URL,
-      {},
-      { page, limit: pageSize }
-    );
-
-    const postIds = Object.keys(posts);
+    const postIds = await dispatch(loadPosts(page, pageSize));
     dispatch(loadSuccess(postIds));
   } catch (err) {
     dispatch(errorOccurred(err));

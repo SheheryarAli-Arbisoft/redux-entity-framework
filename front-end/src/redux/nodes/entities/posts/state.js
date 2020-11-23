@@ -4,12 +4,12 @@ export const initialState = {
   error: null,
 };
 
-export const isLoading = state => ({
+export const loadRequest = state => ({
   ...state,
   isLoading: true,
 });
 
-export const loadPosts = (state, payload) => ({
+export const loadSuccess = (state, payload) => ({
   ...state,
   data: { ...state.data, ...payload },
   isLoading: false,

@@ -9,15 +9,18 @@ export const GET_POSTS_REQUEST = 'posts/GET_POSTS_REQUEST';
 export const GET_POSTS_SUCCESS = 'posts/GET_POSTS_SUCCESS';
 export const POST_LIKED_STATUS_CHANGED = 'posts/POST_LIKED_STATUS_CHANGED';
 export const POSTS_ERROR = 'posts/POSTS_ERROR';
+export const LOAD_REQUEST = 'posts/LOAD_REQUEST';
+export const LOAD_SUCCESS = 'posts/LOAD_SUCCESS';
+export const ERROR = 'posts/ERROR';
 
-const setIsLoading = () => ({
-  type: GET_POSTS_REQUEST,
-});
+// const setIsLoading = () => ({
+//   type: GET_POSTS_REQUEST,
+// });
 
-const postsLoaded = data => ({
-  type: GET_POSTS_SUCCESS,
-  payload: data,
-});
+// const postsLoaded = data => ({
+//   type: GET_POSTS_SUCCESS,
+//   payload: data,
+// });
 
 const postLikedStatusChanged = post => ({
   type: POST_LIKED_STATUS_CHANGED,
@@ -67,8 +70,17 @@ const errorOccurred = err => ({
 //   return result;
 // };
 
+const loadRequest = () => ({
+  type: LOAD_REQUEST,
+});
+
+const loadSuccess = posts => ({
+  type: LOAD_SUCCESS,
+  payload: posts,
+});
+
 export const loadPosts = (page, limit) => async dispatch => {
-  dispatch(setIsLoading());
+  dispatch(loadRequest());
 
   try {
     const posts = await callApi(METHOD_GET, API_URL, {}, { page, limit });
@@ -80,7 +92,8 @@ export const loadPosts = (page, limit) => async dispatch => {
     // const usersList = getUsersList(posts, comments, getState);
     // await dispatch(loadUsers(usersList));
 
-    dispatch(postsLoaded(posts));
+    dispatch(loadSuccess(posts));
+    return Object.keys(posts);
   } catch (err) {
     dispatch(errorOccurred(err));
   }
