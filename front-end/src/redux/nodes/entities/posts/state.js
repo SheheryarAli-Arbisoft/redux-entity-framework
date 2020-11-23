@@ -16,7 +16,7 @@ export const loadPosts = (state, payload) => ({
   error: null,
 });
 
-export const postLiked = (state, post) => ({
+export const postLikedStatusChanged = (state, post) => ({
   ...state,
   data: [
     ...state.data.map(item => {

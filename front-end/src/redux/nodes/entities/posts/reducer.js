@@ -2,13 +2,13 @@ import {
   initialState,
   isLoading,
   loadPosts,
-  postLiked,
+  postLikedStatusChanged,
   errorOccurred,
 } from './state';
 import {
   GET_POSTS_REQUEST,
   GET_POSTS_SUCCESS,
-  POST_LIKED,
+  POST_LIKED_STATUS_CHANGED,
   POSTS_ERROR,
 } from './actions';
 
@@ -20,8 +20,8 @@ export const posts = (state = initialState, action) => {
       return isLoading(state);
     case GET_POSTS_SUCCESS:
       return loadPosts(state, payload);
-    case POST_LIKED:
-      return postLiked(state, payload);
+    case POST_LIKED_STATUS_CHANGED:
+      return postLikedStatusChanged(state, payload);
     case POSTS_ERROR:
       return errorOccurred(state, payload);
     default:

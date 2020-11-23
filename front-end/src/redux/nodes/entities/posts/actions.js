@@ -7,7 +7,7 @@ import { getUsers } from '../users/selectors';
 const API_URL = '/api/posts';
 export const GET_POSTS_REQUEST = 'posts/GET_POSTS_REQUEST';
 export const GET_POSTS_SUCCESS = 'posts/GET_POSTS_SUCCESS';
-export const POST_LIKED = 'posts/POST_LIKED';
+export const POST_LIKED_STATUS_CHANGED = 'posts/POST_LIKED_STATUS_CHANGED';
 export const POSTS_ERROR = 'posts/POSTS_ERROR';
 
 const setIsLoading = () => ({
@@ -19,8 +19,8 @@ const postsLoaded = data => ({
   payload: data,
 });
 
-const postLiked = post => ({
-  type: POST_LIKED,
+const postLikedStatusChanged = post => ({
+  type: POST_LIKED_STATUS_CHANGED,
   payload: post,
 });
 
@@ -98,7 +98,16 @@ export const createPost = (values, history) => async dispatch => {
 export const likePost = postId => async dispatch => {
   try {
     const post = await callApi(METHOD_PUT, `${API_URL}/like/${postId}`);
-    dispatch(postLiked(post));
+    dispatch(postLikedStatusChanged(post));
+  } catch (err) {
+    dispatch(errorOccurred(err));
+  }
+};
+
+export const unlikePost = postId => async dispatch => {
+  try {
+    const post = await callApi(METHOD_PUT, `${API_URL}/unlike/${postId}`);
+    dispatch(postLikedStatusChanged(post));
   } catch (err) {
     dispatch(errorOccurred(err));
   }
