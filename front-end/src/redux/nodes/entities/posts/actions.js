@@ -69,7 +69,7 @@ const getUsersList = (posts, comments, getState) => {
   return result;
 };
 
-export const loadPosts = (page, limit) => async (dispatch, getState) => {
+export const loadPosts = (params = {}) => async (dispatch, getState) => {
   dispatch(loadRequest());
 
   try {
@@ -77,7 +77,7 @@ export const loadPosts = (page, limit) => async (dispatch, getState) => {
       METHOD_GET,
       API_URL,
       {},
-      { page, limit }
+      params
     );
 
     const commentsList = getCommentList(posts);

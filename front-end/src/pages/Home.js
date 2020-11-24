@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadPostFeed } from '../redux/nodes/features/postFeed/actions';
+import {
+  loadPostFeed,
+  loadMorePosts,
+} from '../redux/nodes/features/postFeed/actions';
 import { getPostFeed } from '../redux/nodes/features/postFeed/selectors';
 import { getPosts } from '../redux/nodes/entities/posts/selectors';
 import { Navbar } from '../components/Navbar';
@@ -13,14 +16,16 @@ import { LoadingIndicator } from '../components/LoadingIndicator';
 export const Home = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [page] = useState(1);
-  const [limit] = useState(10);
-  const { isLoading, postIds } = useSelector(getPostFeed);
+  const {
+    isLoading,
+    postIds,
+    pagination: { isPaginationLoading, hasMoreRecords },
+  } = useSelector(getPostFeed);
   const { posts } = useSelector(getPosts);
 
   useEffect(() => {
-    dispatch(loadPostFeed(page, limit));
-  }, [page]);
+    dispatch(loadPostFeed());
+  }, []);
 
   return (
     <>
@@ -38,18 +43,17 @@ export const Home = () => {
         ))}
 
         {isLoading && <LoadingIndicator />}
-        {/* {isLoading ? (
-          <LoadingIndicator />
-        ) : (
+
+        {!isPaginationLoading && hasMoreRecords && (
           <Button
             variant='outlined'
             size='large'
-            onClick={() => setPage(value => value + 1)}
+            onClick={() => dispatch(loadMorePosts())}
             fullWidth
           >
             Load more
           </Button>
-        )} */}
+        )}
       </Container>
     </>
   );

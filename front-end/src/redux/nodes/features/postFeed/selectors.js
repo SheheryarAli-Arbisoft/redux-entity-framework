@@ -5,5 +5,6 @@ export const getPostFeed = createSelector(
   postFeed => ({
     isLoading: postFeed.isLoading,
     postIds: postFeed.postIds,
+    pagination: postFeed.pagination,
   })
 );

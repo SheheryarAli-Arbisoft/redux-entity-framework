@@ -6,20 +6,15 @@ const { isAuthenticated } = require('../handlers');
 const postRouter = express.Router();
 
 postRouter.get('/', async (req, res) => {
-  const currentPage = req.query.currentPage || 1;
-  const pageSize = req.query.pageSize || 25;
-  const totalRecords = req.query.totalRecords || (await Post.count());
-  const { startId } = req.query;
-
-  const options = {};
-  if (startId) {
-    options._id = startId;
-  }
+  const currentPage = parseInt(req.query.currentPage, 10) || 1;
+  const pageSize = parseInt(req.query.pageSize, 10) || 1;
+  const totalRecords =
+    parseInt(req.query.totalRecords, 10) || (await Post.countDocuments());
 
   try {
     const result = {};
-    const posts = await Post.find(options)
-      .skip((parseInt(currentPage, 10) - 1) * pageSize)
+    const posts = await Post.find()
+      .skip((currentPage - 1) * pageSize)
       .limit(pageSize)
       .sort({ timestamp: -1 });
 
@@ -33,7 +28,6 @@ postRouter.get('/', async (req, res) => {
       pageSize,
       totalRecords,
       hasMoreRecords,
-      startId: currentPage === 1 ? posts[0].id : startId,
     };
 
     res.json({ posts: result, pagination });
