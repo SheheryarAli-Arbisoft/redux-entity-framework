@@ -5,6 +5,7 @@ import { getData } from '../../redux/nodes/authentication/selectors';
 import { likePost, unlikePost } from '../../redux/nodes/entities/posts/actions';
 import { createComment } from '../../redux/nodes/entities/comments/actions';
 import { getComments } from '../../redux/nodes/entities/comments/selectors';
+import { getUsers } from '../../redux/nodes/entities/users/selectors';
 import {
   StyledCard,
   StyledCardContent,
@@ -20,6 +21,7 @@ export const Card = ({ post, ...rest }) => {
   const dispatch = useDispatch();
   const { userId } = useSelector(getData);
   const { comments } = useSelector(getComments);
+  const { users } = useSelector(getUsers);
   const [liked, setLiked] = useState(false);
   const {
     values: { comment },
@@ -68,7 +70,14 @@ export const Card = ({ post, ...rest }) => {
           <Button type='submit'>Submit</Button>
         </StyledForm>
         {post.comments.map(commentId => (
-          <div key={commentId}>{comments[commentId].content}</div>
+          <div key={commentId} style={{ padding: '8px' }}>
+            <div style={{ fontSize: '17px', fontWeight: 'bold' }}>
+              {users[comments[commentId].user].name}
+            </div>
+            <div style={{ fontSize: '14px' }}>
+              {comments[commentId].content}
+            </div>
+          </div>
         ))}
       </StyledCardContent>
     </StyledCard>
