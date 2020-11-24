@@ -3,22 +3,26 @@ export const initialState = {
   isLoading: true,
   error: null,
   pagination: {
-    page: 1,
-    pageSize: 10,
-    finished: false,
+    isPaginationLoading: true,
   },
 };
 
 export const loadRequest = state => ({
   ...state,
   isLoading: true,
+  pagination: { ...state.pagination, isPaginationLoading: true },
 });
 
-export const loadSuccess = (state, payload) => ({
+export const loadSuccess = (state, { postIds, pagination }) => ({
   ...state,
   isLoading: false,
   error: null,
-  postIds: [...state.postIds, ...payload],
+  postIds: [...state.postIds, ...postIds],
+  pagination: {
+    ...state.pagination,
+    isPaginationLoading: false,
+    ...pagination,
+  },
 });
 
 export const error = (state, payload) => ({

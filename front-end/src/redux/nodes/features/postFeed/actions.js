@@ -8,9 +8,9 @@ const loadRequest = () => ({
   type: LOAD_REQUEST,
 });
 
-const loadSuccess = postIds => ({
+const loadSuccess = (postIds, pagination) => ({
   type: LOAD_SUCCESS,
-  payload: postIds,
+  payload: { postIds, pagination },
 });
 
 const errorOccurred = err => ({
@@ -25,8 +25,8 @@ export const loadPostFeed = (page, pageSize) => async dispatch => {
   dispatch(loadRequest());
 
   try {
-    const postIds = await dispatch(loadPosts(page, pageSize));
-    dispatch(loadSuccess(postIds));
+    const { postIds, pagination } = await dispatch(loadPosts(page, pageSize));
+    dispatch(loadSuccess(postIds, pagination));
   } catch (err) {
     dispatch(errorOccurred(err));
   }

@@ -6,20 +6,37 @@ const { isAuthenticated } = require('../handlers');
 const postRouter = express.Router();
 
 postRouter.get('/', async (req, res) => {
-  const limit = parseInt(req.query.limit, 10);
-  const skip = (parseInt(req.query.page, 10) - 1) * limit;
+  const currentPage = req.query.currentPage || 1;
+  const pageSize = req.query.pageSize || 25;
+  const totalRecords = req.query.totalRecords || (await Post.count());
+  const { startId } = req.query;
+
+  const options = {};
+  if (startId) {
+    options._id = startId;
+  }
 
   try {
     const result = {};
-    const posts = await Post.find()
-      .skip(skip)
-      .limit(limit)
+    const posts = await Post.find(options)
+      .skip((parseInt(currentPage, 10) - 1) * pageSize)
+      .limit(pageSize)
       .sort({ timestamp: -1 });
 
     posts.forEach(post => {
       result[post.id] = post;
     });
-    res.json(result);
+
+    const hasMoreRecords = posts.length >= pageSize;
+    const pagination = {
+      currentPage,
+      pageSize,
+      totalRecords,
+      hasMoreRecords,
+      startId: currentPage === 1 ? posts[0].id : startId,
+    };
+
+    res.json({ posts: result, pagination });
   } catch (err) {
     return res.status(500).json({ msg: 'Server error' });
   }

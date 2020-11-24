@@ -73,7 +73,12 @@ export const loadPosts = (page, limit) => async (dispatch, getState) => {
   dispatch(loadRequest());
 
   try {
-    const posts = await callApi(METHOD_GET, API_URL, {}, { page, limit });
+    const { posts, pagination } = await callApi(
+      METHOD_GET,
+      API_URL,
+      {},
+      { page, limit }
+    );
 
     const commentsList = getCommentList(posts);
     await dispatch(loadComments(commentsList));
@@ -83,7 +88,7 @@ export const loadPosts = (page, limit) => async (dispatch, getState) => {
     await dispatch(loadUsers(usersList));
 
     dispatch(loadSuccess(posts));
-    return Object.keys(posts);
+    return { postIds: Object.keys(posts), pagination };
   } catch (err) {
     dispatch(error(err));
   }
