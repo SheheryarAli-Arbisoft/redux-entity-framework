@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { getData } from '../../redux/nodes/authentication/selectors';
@@ -48,7 +49,12 @@ export const Card = ({ post, ...rest }) => {
         <Text variant='h5' gutterBottom>
           {post.title}
         </Text>
-        <Text variant='body2'>{post.content}</Text>
+        <Text variant='body2' color='textSecondary' gutterBottom>
+          {`Created by ${users[post.user].name} ${moment(
+            post.timestamp
+          ).fromNow()}`}
+        </Text>
+        <Text variant='body1'>{post.content}</Text>
         <StyledButton
           onClick={() =>
             dispatch(liked ? unlikePost(post._id) : likePost(post._id))
@@ -71,10 +77,13 @@ export const Card = ({ post, ...rest }) => {
         </StyledForm>
         {post.comments.map(commentId => (
           <div key={commentId} style={{ padding: '8px' }}>
-            <div style={{ fontSize: '17px', fontWeight: 'bold' }}>
+            <div style={{ fontSize: '16px', fontWeight: 'bold' }}>
               {users[comments[commentId].user].name}
             </div>
-            <div style={{ fontSize: '14px' }}>
+            <div style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.54)' }}>
+              {moment(comments[commentId].timestamp).fromNow()}
+            </div>
+            <div style={{ fontSize: '15px' }}>
               {comments[commentId].content}
             </div>
           </div>

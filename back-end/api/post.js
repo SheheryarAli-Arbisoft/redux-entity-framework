@@ -7,7 +7,7 @@ const postRouter = express.Router();
 
 postRouter.get('/', async (req, res) => {
   const currentPage = parseInt(req.query.currentPage, 10) || 1;
-  const pageSize = parseInt(req.query.pageSize, 10) || 1;
+  const pageSize = parseInt(req.query.pageSize, 10) || 10;
   const totalRecords =
     parseInt(req.query.totalRecords, 10) || (await Post.countDocuments());
 
