@@ -9,6 +9,7 @@ export const propTypes = {
   type: PropTypes.string,
   fullWidth: PropTypes.bool,
   marginBottom: PropTypes.bool,
+  marginTop: PropTypes.bool,
   displayNone: PropTypes.bool,
 };
 
@@ -18,5 +19,6 @@ export const defaultProps = {
   color: 'primary',
   fullWidth: false,
   marginBottom: false,
+  marginTop: false,
   displayNone: false,
 };

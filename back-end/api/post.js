@@ -23,13 +23,16 @@ postRouter.get('/', async (req, res) => {
       .skip((currentPage - 1) * pageSize)
       .limit(pageSize)
       .sort({ timestamp: -1 });
+
+    const hasMoreRecords = posts.length >= pageSize;
+
     posts = formatResponse(posts);
 
     const pagination = {
       currentPage,
       pageSize,
       totalRecords,
-      hasMoreRecords: posts.length >= pageSize,
+      hasMoreRecords,
     };
 
     res.json({ posts, pagination });

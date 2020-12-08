@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import _ from 'lodash';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   loadInitialPosts,
@@ -11,15 +12,13 @@ import { Navbar } from '../components/Navbar';
 import { MainContainer } from '../components/Container';
 import { CreatePostForm } from '../components/Forms';
 import { Card } from '../components/Card';
-import { Button } from '../components/Button';
 import { LoadingIndicator } from '../components/LoadingIndicator';
 
 export const Home = () => {
   const dispatch = useDispatch();
   const {
-    isLoading,
     postIds,
-    pagination: { isPaginationLoading, hasMoreRecords },
+    pagination: { hasMoreRecords },
   } = useSelector(getPostFeed);
   const { posts } = useSelector(getPosts);
 
@@ -33,22 +32,16 @@ export const Home = () => {
       <MainContainer>
         <CreatePostForm />
 
-        {_.map(postIds, postId => (
-          <Card key={postId} post={posts[postId]} />
-        ))}
-
-        {isLoading && <LoadingIndicator />}
-
-        {!isPaginationLoading && hasMoreRecords && (
-          <Button
-            variant='outlined'
-            size='large'
-            onClick={() => dispatch(loadMorePosts())}
-            fullWidth
-          >
-            Load more
-          </Button>
-        )}
+        <InfiniteScroll
+          dataLength={postIds.length}
+          loader={<LoadingIndicator />}
+          hasMore={hasMoreRecords}
+          next={() => dispatch(loadMorePosts())}
+        >
+          {_.map(postIds, postId => (
+            <Card key={postId} post={posts[postId]} />
+          ))}
+        </InfiniteScroll>
       </MainContainer>
     </>
   );

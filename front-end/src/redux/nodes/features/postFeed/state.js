@@ -4,6 +4,7 @@ export const initialState = {
   error: null,
   pagination: {
     isPaginationLoading: true,
+    hasMoreRecords: true,
   },
 };
 
