@@ -2,10 +2,8 @@ version: '3.9'
 
 services:
   application:
+    image: sheheryaraliarbisoft/redux-entity-framework:1.0.0
     container_name: 'application'
-    build:
-      context: .
-      dockerfile: Dockerfile
     ports:
       - '5000:5000'
 
